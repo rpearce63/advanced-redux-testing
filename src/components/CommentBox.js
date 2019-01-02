@@ -6,16 +6,32 @@ import * as actions from "actions";
 export class CommentBox extends Component {
   state = { comment: "" };
 
+  // First render
+  componentDidMount() {
+    this.shouldNavigateAway();
+  }
+
+  // props are updated
+  componentDidUpdate() {
+    this.shouldNavigateAway();
+  }
+
+  shouldNavigateAway() {
+    if (!this.props.auth) {
+      this.props.history.push("/");
+    }
+  }
+
   handleChange = e => {
     this.setState({ comment: e.target.value });
   };
+
   handleSubmit = e => {
     e.preventDefault();
-
     this.props.saveComment(this.state.comment);
-
     this.setState({ comment: "" });
   };
+
   render() {
     return (
       <div>
@@ -34,7 +50,13 @@ export class CommentBox extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   actions
 )(CommentBox);
