@@ -1,12 +1,16 @@
 import React from "react";
 import { mount, shallow } from "enzyme";
-import { CommentBox } from "components/CommentBox";
+import CommentBox from "components/CommentBox";
+import Root from "Root";
 
 let wrapped;
-const mockSaveComment = jest.fn();
-const props = { saveComment: mockSaveComment };
+// //const props = { saveComment: mockSaveComment };
 beforeEach(() => {
-  wrapped = mount(<CommentBox {...props} />);
+  wrapped = mount(
+    <Root>
+      <CommentBox />
+    </Root>
+  );
 });
 
 afterEach(() => {
@@ -15,7 +19,7 @@ afterEach(() => {
 
 it("has a textarea and a button", () => {
   expect(wrapped.find("textarea").length).toEqual(1);
-  expect(wrapped.find("button").length).toEqual(1);
+  expect(wrapped.find("button").length).toEqual(2);
 });
 
 describe("the textarea", () => {
@@ -32,7 +36,7 @@ describe("the textarea", () => {
 
   it("clears the textarea when submit button is clicked", () => {
     wrapped.find("form").simulate("submit");
-    expect(mockSaveComment).toHaveBeenCalledWith("new comment");
+    //expect(mockSaveComment).toHaveBeenCalledWith("new comment");
     wrapped.update();
     expect(wrapped.find("textarea").prop("value")).toEqual("");
   });
